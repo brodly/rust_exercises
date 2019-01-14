@@ -2,51 +2,57 @@ use std::io;
 use std::collections::HashMap;
 
 fn main() {
-    // init company hashmap and input var
-    let mut company: HashMap<&str, Vec<&str>> = HashMap::new();
-    let mut input = String::new();
+    let mut company = HashMap::new();
 
-    // Get input string and set it to input var
-    io::stdin().read_line(&mut input).unwrap();
+    loop {
+        let mut input = String::new();
+        let mut name = String::new();
+        let mut department = String::new();
 
-    // Remove newline character
-    input.pop();
+        println!("Press 1 to list employees from department");
+        println!("Press 2 to input employees into department");
 
-    // convert insert to str
-    input = input.as_str();
+        io::stdin().read_line(&mut input).unwrap();
 
-    // check if department exists
-    fn get_employees(department) -> Vec {
-        match company.get(department) {
-            // if no department exists
-            None => {
-                // create new vector with input as employee
-                let input_vec = vec![input];
+        let input: u32 = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please choose a number");
+                continue;
+            },
+        };
 
-                // create department within company
-                company.insert(department, input_vec);
-            }
+        match input {
+            1 => {
+                println!("Input Employee Name");
 
-            // If list of employees exists
-            Some(v) => {
-                // push input var into vector
-            }
+                io::stdin().read_line(&mut name).unwrap();
+                name.pop();
+
+                println!("Input Department");
+
+                io::stdin().read_line(&mut department).unwrap();
+                department.pop();
+
+                match company.get_mut(&department) {
+                    None => {
+                        let mut new_employees = Vec::new();
+                        new_employees.push(name);
+                        company.insert(department, new_employees);
+                        println!("{:?}", company);
+                        continue;
+                    },
+                    Some(employees) => {
+                        employees.push(name);
+                        println!("{:?}", company);
+                        continue;
+                    }
+                }
+            },
+            2 => {
+                println!("Input Department Name");
+            },
+            _ => (),
         }
     }
-
-    // insert
-
-
-    let mut eng_vec = vec![];
-
-
-
-    company.insert("engineering", eng_vec);
-
-    println!("{:?}", company);
 }
-
-// {
-//     engineering: ["Josh", "Jake"],
-//     sales: ["Jorge", "Peter"],
-// }

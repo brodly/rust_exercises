@@ -5,16 +5,16 @@ fn main() {
     let mut company = HashMap::new();
 
     loop {
-        let mut input = String::new();
+        let mut select = String::new();
         let mut name = String::new();
         let mut department = String::new();
 
-        println!("Press 1 to list employees from department");
-        println!("Press 2 to input employees into department");
+        println!("Press 1 to input employees into department");
+        println!("Press 2 to list employees from department");
 
-        io::stdin().read_line(&mut input).unwrap();
+        io::stdin().read_line(&mut select).unwrap();
 
-        let input: u32 = match input.trim().parse() {
+        let select: u32 = match select.trim().parse() {
             Ok(num) => num,
             Err(_) => {
                 println!("Please choose a number");
@@ -22,7 +22,7 @@ fn main() {
             },
         };
 
-        match input {
+        match select {
             1 => {
                 println!("Input Employee Name");
 
@@ -51,6 +51,20 @@ fn main() {
             },
             2 => {
                 println!("Input Department Name");
+
+                io::stdin().read_line(&mut department).unwrap();
+                department.pop();
+
+                match company.get(&department) {
+                    None => {
+                        println!("No Department Found");
+                        continue;
+                    },
+                    Some(employees) => {
+                        println!("Employee List: {:?}", employees);
+                        continue;
+                    },
+                }
             },
             _ => (),
         }
